@@ -8,11 +8,13 @@ use clap::{Parser, Subcommand};
 use crate::composer_json::ComposerJson;
 use crate::modify_composer_json::ModifyComposerJson;
 use crate::parse_handler::ParseFile;
+use crate::modify::handle_modify;
 
 mod composer_json;
 mod modify_composer_json;
 mod parse_handler;
 mod fs;
+mod modify;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -135,6 +137,8 @@ fn handle_modify_commands(cmds: &ModifyCommands) -> io::Result<()> {
             } else {
                 println!("Modifying {} using {}", composer_json, modify)
             }
+
+            handle_modify(composer_json, modify, print, dry_run);
 
             if *print {
                 let pretty = "<placeholder>";
