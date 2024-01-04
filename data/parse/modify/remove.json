@@ -1,0 +1,8 @@
+{
+    "remove": {
+        "require": {
+            "foo/bar": "<2.0",
+            "php": "<8"
+        }
+    }
+}

@@ -49,7 +49,36 @@ impl ParseFileType {
         }
     }
 
-    fn parse<S>(&self, file_name: &str) -> io::Result<S>
+    /*
+    pub(crate) fn handle_parse_and_return<S>(&self, file_name: &str) -> io::Result<S> 
+        where S: for<'a> Deserialize<'a>+Serialize
+    {
+        return match self {
+            ParseFileType::ComposerJson => self._handle_parse_and_return::<ComposerJson>(file_name),
+            ParseFileType::ModifyComposerJson => self._handle_parse_and_return::<ModifyComposerJson>(file_name)
+        }
+    }
+    */
+    
+    pub(crate) fn _handle_parse_and_return<S>(&self, file_name: &str) -> io::Result<S> 
+        where S: for<'a> Deserialize<'a>+Serialize
+    {
+        return match self.parse::<S>(&file_name) {
+            Ok(parsed) => {
+                Ok(parsed)
+            },
+            Err(e) => {
+                Err(
+                    io::Error::new(
+                        io::ErrorKind::InvalidInput,
+                        format!("error parsing {}: {}", file_name, e),
+                    )
+                )
+            },
+        }
+    }
+
+    pub(crate) fn parse<S>(&self, file_name: &str) -> io::Result<S>
         where S: for<'a> Deserialize<'a>+Serialize
     {
         let file_contents = get_file_contents(file_name)?;

@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use std::hash::Hash;
+use std::fmt;
 
 use regex::Regex;
 use serde::{Deserialize, Serialize};
@@ -7,7 +8,7 @@ use serde::{Deserialize, Serialize};
 use crate::composer_json::{AllowPlugins, PlatformConstraint};
 use crate::parse_handler::{ParseFile,ParseFileType};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ModifyComposerJson {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub modify: Option<ModifyConfig>,
@@ -30,7 +31,7 @@ impl ParseFile for ModifyComposerJson {
 
 // region <<- [ ModifyConfig ] ->>
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ModifyConfig {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub require: Option<Require>,
@@ -47,26 +48,33 @@ pub struct ModifyConfig {
 
 // region <<- [ AddConfig ] ->>
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AddConfig {}
 
 // endregion [ AddConfig ]
 
 // region <<- [ RemoveConfig ] ->>
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct RemoveConfig {}
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct RemoveConfig {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub require: Option<Require>,
+
+    #[serde(rename = "require-dev")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub require_dev: Option<Require>,
+}
 
 // endregion [ RemoveConfig ]
 
 // region <<- [ ReplaceConfig ] ->>
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ReplaceConfig {}
 
 // endregion [ ReplaceConfig ]
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ModifierConfig {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub platform: Option<HashMap<crate::composer_json::PlatformPackage, PlatformConstraint>>,
@@ -80,10 +88,17 @@ pub type Require = HashMap<PackagePattern, VersionConstraint>;
 
 pub type VersionConstraint = String;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PackagePattern {
     pattern: String,
     regex: Regex,
+}
+
+impl fmt::Display for PackagePattern {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_fmt(format_args!("{}", self.pattern))
+        //f.write_str(self.to_str())
+    }
 }
 
 impl Hash for PackagePattern {

@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use crate::parse_handler::{ParseFile,ParseFileType};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ComposerJson {
     /// The name of the package. It consists of vendor name and project name, separated by `/`.
     ///
@@ -651,7 +651,7 @@ impl ParseFile for ComposerJson {
 /// Reference: [Root Package](https://getcomposer.org/doc/04-schema.md#root-package).
 trait RootOnly {}
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum OneOrMany<T> {
     One(T),
     Many(Vec<T>),
@@ -681,7 +681,7 @@ pub enum OneOrMany<T> {
 /// It is recommended to omit this field and have it default to `library`.
 ///
 /// Reference: [The composer.json schema (type)](https://getcomposer.org/doc/04-schema.md#type).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum PackageType {
     /// This is the default. It will copy the files to `vendor`.
     #[serde(rename = "library")]
@@ -795,7 +795,7 @@ pub enum PackageType {
 /// **Note:** It is important to list PHP extensions your project requires. Not all PHP installations are created equal: some may miss extensions you may consider as standard (such as ext-mysqli which is not installed by default in Fedora/CentOS minimal installation systems). Failure to list required PHP extensions may lead to a bad user experience: Composer will install your package without any errors but it will then fail at run-time. The composer show --platform command lists all PHP extensions available on your system. You may use it to help you compile the list of extensions you use and require. Alternatively you may use third party tools to analyze your project for the list of extensions used.
 ///
 /// See [The composer.json schema](https://getcomposer.org/doc/04-schema.md#package-links) for details.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PackageLinks {
     /// Map of packages required by this package. The package will not be installed unless those requirements can be met.
     ///
@@ -878,7 +878,7 @@ pub struct PackageLinks {
     pub suggest: Option<HashMap<String, String>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Author {
     pub name: String,
     pub email: String,
@@ -916,7 +916,7 @@ pub struct Author {
 /// ```
 ///
 /// See [The composer.json schema](https://getcomposer.org/doc/04-schema.md#support) for details.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Support {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
@@ -963,7 +963,7 @@ pub struct Support {
 /// ```
 ///
 /// See [The composer.json schema](https://getcomposer.org/doc/04-schema.md#funding) for details.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Funding {
     #[serde(rename = "type")]
     pub platform: String,
@@ -971,7 +971,7 @@ pub struct Funding {
 }
 
 /// See [The composer.json schema](https://getcomposer.org/doc/04-schema.md#autoload) for details.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Autoload {
     /// Under the `psr-4` key you define a mapping from namespaces to paths, relative to the package root.
     /// When autoloading a class like `Foo\\Bar\\Baz` a namespace prefix `Foo\\` pointing to a directory `src/`
@@ -1145,7 +1145,7 @@ pub struct Autoload {
 /// - stable
 ///
 /// See [The composer.json schema](https://getcomposer.org/doc/04-schema.md#minimum-stability) for details.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Stability {
     #[serde(rename = "dev")]
     Dev,
@@ -1179,7 +1179,7 @@ pub enum Stability {
 /// article for more details and to see how to change this behavior.
 ///
 /// Reference: [Repository](https://getcomposer.org/doc/05-repositories.md#repository).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Repository {
     #[serde(rename = "type")]
     pub repository_type: RepositoryType,
@@ -1197,7 +1197,7 @@ pub struct Repository {
 /// - [path](https://getcomposer.org/doc/05-repositories.md#path)
 ///
 /// See: [Repositories](https://getcomposer.org/doc/05-repositories.md).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum RepositoryType {
     /// The main repository type is the `composer` repository.
     /// It uses a single `packages.json` file that contains all of the package metadata.
@@ -1278,7 +1278,7 @@ pub enum RepositoryType {
     Path,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum PackageSourceConfig {
     #[serde(rename = "dist")]
     Dist,
@@ -1298,19 +1298,19 @@ type GitlabHost = Host;
 
 type GitlabToken = String;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum GitlabTokenConfig {
     Simple(HashMap<GitlabHost, GitlabToken>),
     Detailed(HashMap<GitlabHost, GitlabTokenDetails>),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GitlabTokenDetails {
     username: String,
     token: GitlabToken,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum GitProtocol {
     #[serde(rename = "git")]
     Git,
@@ -1324,7 +1324,7 @@ pub enum GitProtocol {
 
 type BitbucketHost = Host;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BitbucketOauth {
     #[serde(rename = "consumer-key")]
     pub consumer_key: String,
@@ -1333,7 +1333,7 @@ pub struct BitbucketOauth {
     pub consumer_secret: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BasicAuth {
     #[serde(rename = "username")]
     pub username: String,
@@ -1347,13 +1347,13 @@ pub type PlatformPackage = String;
 pub type Version = String;
 pub type PlatformConstraint = String;
 
-//#[derive(Debug, Serialize, Deserialize)]
+//#[derive(Debug, Clone, Serialize, Deserialize)]
 //pub enum PlatformConstraint {
     //Version(Version),
     //Hide(bool),
 //}
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum BinaryCompatibility {
     #[serde(rename = "auto")]
     Auto,
@@ -1365,7 +1365,7 @@ pub enum BinaryCompatibility {
     Proxy,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum DiscardChangesMode {
     #[serde(rename = "stash")]
     Stash,
@@ -1375,7 +1375,7 @@ pub enum DiscardChangesMode {
 
 type ArchiveFormat = String;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum PlatformCheckMode {
     #[serde(rename = "php-only")]
     PhpOnly,
@@ -1383,7 +1383,7 @@ pub enum PlatformCheckMode {
     Toggle(bool),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum PreferredInstall {
     #[serde(rename = "dist")]
     Dist,
@@ -1391,7 +1391,7 @@ pub enum PreferredInstall {
     Map(HashMap<String, PackageSourceConfig>),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Config {
     /// The timeout in seconds for process executions, defaults to 300 (5 minutes).
     /// The duration processes like git clones can run before Composer assumes they died out.
@@ -2034,7 +2034,7 @@ pub struct Config {
 /// - `true` (always store),
 /// - `false` (do not store), and
 /// - `"prompt"` (ask every time)
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum ConfigStoreAuths {
     #[serde(rename = "true")]
     AlwaysStore,
@@ -2046,7 +2046,7 @@ pub enum ConfigStoreAuths {
     AskEveryTime,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum AllowPlugins {
     Toggle(bool),
     Map(HashMap<String, bool>),
@@ -2055,7 +2055,7 @@ pub enum AllowPlugins {
 /// Security audit configuration options.
 ///
 /// Reference [Config ()](https://getcomposer.org/doc/06-config.md#).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Audit {
     /// A set of advisory ids, remote ids or CVE ids that should be ignored and not reported as part of an audit.
     ///
@@ -2073,7 +2073,7 @@ pub struct Audit {
     ignored: Vec<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum ScriptEventType {
     Command(CommandEvent),
     Installer(InstallerEvent),
@@ -2082,7 +2082,7 @@ pub enum ScriptEventType {
 }
 
 /// Reference: [Scripts (Command Events)](https://getcomposer.org/doc/articles/scripts.md#command-events).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum CommandEvent {
     /// Occurs before the `install` command is executed with a lock file present.
     #[serde(rename = "pre-install-cmd")]
@@ -2134,7 +2134,7 @@ pub enum CommandEvent {
 }
 
 /// Reference: [Scripts (Installer Events)](https://getcomposer.org/doc/articles/scripts.md#installer-events).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum InstallerEvent {
     /// Occurs before the install/upgrade/.. operations are executed when installing a lock file.
     /// Plugins that need to hook into this event will need to be installed globally to be usable,
@@ -2144,7 +2144,7 @@ pub enum InstallerEvent {
 }
 
 /// Reference: [Scripts (Package Events)](https://getcomposer.org/doc/articles/scripts.md#package-events).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum PackageEvent {
     /// Occurs before a package is installed.
     #[serde(rename = "pre-package-install")]
@@ -2172,7 +2172,7 @@ pub enum PackageEvent {
 }
 
 /// Reference: [Scripts (Plugin Events)](https://getcomposer.org/doc/articles/scripts.md#plugin-events).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum PluginEvent {
     /// Occurs after a Composer instance is done being initialized.
     #[serde(rename = "init")]
@@ -2204,7 +2204,7 @@ pub enum PluginEvent {
     PrePoolCreate,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Scripts {
     /// Occurs before the `install` command is executed with a lock file present.
     #[serde(rename = "pre-install-cmd")]
@@ -2353,7 +2353,7 @@ pub struct Scripts {
 /// it will exclude `/foo/bar/any`, `/foo/baz`, and `/my.test`.
 ///
 /// See [The composer.json schema](https://getcomposer.org/doc/04-schema.md#archive) for details.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Archive {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -2375,7 +2375,7 @@ pub struct Archive {
 /// Defaults to `false`.
 ///
 /// See [The composer.json schema](https://getcomposer.org/doc/04-schema.md#abandoned) for details.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Abandoned {
     Toggle(bool),
     RecommendedAlternative(String),

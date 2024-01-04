@@ -138,7 +138,14 @@ fn handle_modify_commands(cmds: &ModifyCommands) -> io::Result<()> {
                 println!("Modifying {} using {}", composer_json, modify)
             }
 
-            handle_modify(composer_json, modify, print, dry_run);
+            match handle_modify(composer_json, modify, print, dry_run) {
+                Ok(_) => {},
+                Err(e) => {
+                    eprintln!("error parsing {}: {}", composer_json, e);
+
+                    return Ok(());
+                },
+            };
 
             if *print {
                 let pretty = "<placeholder>";
