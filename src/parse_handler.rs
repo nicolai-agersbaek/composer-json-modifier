@@ -32,12 +32,12 @@ impl fmt::Display for ParseFileType {
 impl ParseFileType {
     pub(crate) fn handle_parse(&self, file_name: &str, print: &bool) -> () {
         match self {
-            ParseFileType::ComposerJson => self.handle_parse2::<ComposerJson>(file_name, print),
-            ParseFileType::ModifyComposerJson => self.handle_parse2::<ModifyComposerJson>(file_name, print)
+            ParseFileType::ComposerJson => self._handle_parse::<ComposerJson>(file_name, print),
+            ParseFileType::ModifyComposerJson => self._handle_parse::<ModifyComposerJson>(file_name, print)
         }
     }
     
-    fn handle_parse2<S>(&self, file_name: &str, print: &bool) -> () 
+    fn _handle_parse<S>(&self, file_name: &str, print: &bool) -> () 
         where S: for<'a> Deserialize<'a>+Serialize
     {
         match self.parse::<S>(&file_name) {
