@@ -45,6 +45,7 @@ enum ParseCommands {
     /// Parse a composer.json file
     ComposerJson {
         /// Name of the composer.json file to parse
+        #[arg(value_name="composer-json")]
         file: String,
 
         /// Print the parsed ComposerJson struct to stdout
@@ -55,6 +56,7 @@ enum ParseCommands {
     /// Parse a modify-composer.json file
     Modify {
         /// Name of the modify-composer.json file to parse
+        #[arg(value_name="composer-json")]
         file: String,
 
         /// Print the parsed ModifyComposerJson struct to stdout
@@ -67,8 +69,13 @@ enum ParseCommands {
 enum ModifyCommands {
     /// Modify a composer.json file
     Run {
-        /// Name of the composer.json file to modify
-        file: String,
+        /// Path to the composer.json file to modify
+        #[arg(value_name="composer-json")]
+        composer_json: String,
+
+        /// Path to the modify-composer.json configuration file
+        #[arg(value_name="modify")]
+        modify: String,
 
         /// Print the modified ComposerJson struct to stdout
         #[arg(short, long, default_value="false")]
@@ -122,17 +129,17 @@ fn handle_parse_commands(cmds: &ParseCommands) -> io::Result<()> {
 
 fn handle_modify_commands(cmds: &ModifyCommands) -> io::Result<()> {
     match cmds {
-        ModifyCommands::Run { file, print, dry_run } => {
+        ModifyCommands::Run { composer_json, modify, print, dry_run } => {
             if *dry_run {
-                println!("Modifying {} (in dry-run mode)", file)
+                println!("Modifying {} using {} (in dry-run mode)", composer_json, modify)
             } else {
-                println!("Modifying {}", file)
+                println!("Modifying {} using {}", composer_json, modify)
             }
 
             if *print {
                 let pretty = "<placeholder>";
 
-                println!("\n{}:\n{}", file, pretty);
+                println!("\n{}:\n{}", composer_json, pretty);
             }
         }
     }
