@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use crate::{ParseFile,ParseFileType};
+use crate::parse_handler::{ParseFile,ParseFileType};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ComposerJson {

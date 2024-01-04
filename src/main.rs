@@ -1,19 +1,18 @@
 #![allow(dead_code)]
 
-use std::fs;
 use std::io;
-use std::fmt;
-use std::path::{Path, PathBuf};
+use std::path::{PathBuf};
 
 use clap::{Parser, Subcommand};
-use serde_json::to_string_pretty;
-use serde::{Deserialize, Serialize};
 
 use crate::composer_json::ComposerJson;
 use crate::modify_composer_json::ModifyComposerJson;
+use crate::parse_handler::ParseFile;
 
 mod composer_json;
 mod modify_composer_json;
+mod parse_handler;
+mod fs;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -82,43 +81,6 @@ fn main() {
     }
 }
 
-trait PathAsserts {
-    fn assert_exists(&self) -> Result<&Path, io::Error>;
-    fn assert_is_file(&self) -> Result<&Path, io::Error>;
-}
-
-impl PathAsserts for Path {
-    fn assert_exists(&self) -> Result<&Path, io::Error> {
-        if !self.exists() {
-            return Err(
-                io::Error::new(
-                    io::ErrorKind::NotFound,
-                    format!("File not found: {}", self.display()),
-                )
-            );
-        }
-
-        Ok(self)
-    }
-
-    fn assert_is_file(&self) -> Result<&Path, io::Error> {
-        if !self.is_file() {
-            return Err(
-                io::Error::new(
-                    io::ErrorKind::InvalidInput,
-                    format!("Path is not a file: {}", self.display()),
-                )
-            );
-        }
-
-        Ok(self)
-    }
-}
-
-fn get_file_path(s: &str) -> Result<&Path, io::Error> {
-    Path::new(s).assert_exists()?.assert_is_file()
-}
-
 fn handle(cmds: &Commands) -> io::Result<()> {
     match cmds {
         Commands::Parse (parse_commands) => handle_parse_commands(parse_commands)
@@ -134,66 +96,4 @@ fn handle_parse_commands(cmds: &ParseCommands) -> io::Result<()> {
     }
 
     Ok(())
-}
-
-pub(crate) trait ParseFile {
-    fn parse_file_type() -> ParseFileType;
-}
-
-enum ParseFileType {
-    ComposerJson,
-    ModifyComposerJson
-}
-
-impl fmt::Display for ParseFileType {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            ParseFileType::ComposerJson => f.write_str("composer.json"),
-            ParseFileType::ModifyComposerJson => f.write_str("modify-composer.json")
-        }
-    }
-}
-
-impl ParseFileType {
-    fn handle_parse(&self, file_name: &str, print: &Option<bool>) -> () {
-        match self {
-            ParseFileType::ComposerJson => self.handle_parse2::<ComposerJson>(file_name, print),
-            ParseFileType::ModifyComposerJson => self.handle_parse2::<ModifyComposerJson>(file_name, print)
-        }
-    }
-    
-    fn handle_parse2<S>(&self, file_name: &str, print: &Option<bool>) -> () 
-        where S: for<'a> Deserialize<'a>+Serialize
-    {
-        match self.parse::<S>(&file_name) {
-            Ok(parsed) => {
-                println!("successfully parsed {} file: {}", self, file_name);
-                self.print_parsed_json::<S>(parsed, file_name, print)
-            }
-            Err(e) => eprintln!("error parsing {}: {}", file_name, e),
-        }
-    }
-
-    fn parse<S>(&self, file_name: &str) -> io::Result<S>
-        where S: for<'a> Deserialize<'a>+Serialize
-    {
-        let file_path = get_file_path(file_name)?;
-        let file_contents = fs::read_to_string(file_path)?;
-        let result: S = serde_json::from_str(&file_contents)?;
-    
-        Ok(result)
-    }
-    
-    fn print_parsed_json<S>(&self, parsed: S, file_name: &str, print: &Option<bool>) -> () 
-            where S: for<'a> Deserialize<'a>+Serialize
-        {
-        if print.unwrap_or(false) {
-            let result = to_string_pretty(&parsed);
-    
-            match result {
-                Ok(pretty) => { println!("\n{}:\n{}", file_name, pretty); }
-                Err(e) => { eprintln!("error prettifying JSON: {}", e) }
-            }
-        }
-    }
 }

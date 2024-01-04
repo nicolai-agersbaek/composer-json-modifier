@@ -5,7 +5,7 @@ use regex::Regex;
 use serde::{Deserialize, Serialize};
 
 use crate::composer_json::{AllowPlugins, PlatformConstraint};
-use crate::{ParseFile,ParseFileType};
+use crate::parse_handler::{ParseFile,ParseFileType};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ModifyComposerJson {
