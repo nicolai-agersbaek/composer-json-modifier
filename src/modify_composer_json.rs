@@ -5,6 +5,7 @@ use regex::Regex;
 use serde::{Deserialize, Serialize};
 
 use crate::composer_json::{AllowPlugins, PlatformConstraint};
+use crate::{ParseFile,ParseFileType};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ModifyComposerJson {
@@ -19,6 +20,12 @@ pub struct ModifyComposerJson {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replace: Option<ReplaceConfig>,
+}
+
+impl ParseFile for ModifyComposerJson {
+    fn parse_file_type() -> ParseFileType {
+        ParseFileType::ModifyComposerJson
+    }
 }
 
 // region <<- [ ModifyConfig ] ->>

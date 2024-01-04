@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use crate::{ParseFile,ParseFileType};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ComposerJson {
@@ -621,6 +622,12 @@ pub struct ComposerJson {
     #[serde(rename = "non-feature-branches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub non_feature_branches: Option<Vec<String>>,
+}
+
+impl ParseFile for ComposerJson {
+    fn parse_file_type() -> ParseFileType {
+        ParseFileType::ComposerJson
+    }
 }
 
 /// Marks a field as only available in the root-level `composer.json` file.
