@@ -26,14 +26,18 @@ struct Cli {
     debug: u8,
 
     #[command(subcommand)]
-    //command: Option<ParseCommands>,
     command: Option<Commands>,
 }
 
 #[derive(Subcommand, Debug)]
 enum Commands {
+    /// Parse a composer.json or other JSON config file, e.g. modify-composer.json
     #[command(subcommand)]
-    Parse(ParseCommands)
+    Parse(ParseCommands),
+
+    /// Modify a composer.json file
+    #[command(subcommand)]
+    Modify(ModifyCommands)
 }
 
 #[derive(Subcommand, Debug)]
@@ -44,7 +48,7 @@ enum ParseCommands {
         file: String,
 
         /// Print the parsed ComposerJson struct to stdout
-        #[arg(short)]
+        #[arg(short, long, default_value="false")]
         print: Option<bool>,
     },
 
@@ -54,8 +58,25 @@ enum ParseCommands {
         file: String,
 
         /// Print the parsed ModifyComposerJson struct to stdout
-        #[arg(short)]
+        #[arg(short, long, default_value="false")]
         print: Option<bool>,
+    },
+}
+
+#[derive(Subcommand, Debug)]
+enum ModifyCommands {
+    /// Modify a composer.json file
+    Run {
+        /// Name of the composer.json file to modify
+        file: String,
+
+        /// Print the modified ComposerJson struct to stdout
+        #[arg(short, long, default_value="false")]
+        print: Option<bool>,
+
+        /// Whether to apply resulting changes to target file
+        #[arg(short, long, default_value="false")]
+        dry_run: Option<bool>,
     },
 }
 
@@ -83,7 +104,8 @@ fn main() {
 
 fn handle(cmds: &Commands) -> io::Result<()> {
     match cmds {
-        Commands::Parse (parse_commands) => handle_parse_commands(parse_commands)
+        Commands::Parse (commands) => handle_parse_commands(commands),
+        Commands::Modify (commands) => handle_modify_commands(commands)
     }?;
 
     Ok(())
@@ -93,6 +115,26 @@ fn handle_parse_commands(cmds: &ParseCommands) -> io::Result<()> {
     match cmds {
         ParseCommands::ComposerJson { file, print } => ComposerJson::parse_file_type().handle_parse(file, print),
         ParseCommands::Modify { file, print } => ModifyComposerJson::parse_file_type().handle_parse(file, print)
+    }
+
+    Ok(())
+}
+
+fn handle_modify_commands(cmds: &ModifyCommands) -> io::Result<()> {
+    match cmds {
+        ModifyCommands::Run { file, print, dry_run } => {
+            if dry_run.unwrap_or(false) {
+                println!("Modifying {} (in dry-run mode)", file)
+            } else {
+                println!("Modifying {}", file)
+            }
+
+            if print.unwrap_or(false) {
+                let pretty = "<placeholder>";
+
+                println!("\n{}:\n{}", file, pretty);
+            }
+        }
     }
 
     Ok(())
