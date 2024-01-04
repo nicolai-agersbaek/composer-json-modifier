@@ -12,6 +12,9 @@ pub(crate) trait ParseFile {
     fn parse_file_type() -> ParseFileType;
 }
 
+const COMPOSER_JSON_FILE_NAME : &str = "composer.json";
+const MODIFY_COMPOSER_JSON_FILE_NAME : &str = "modify-composer.json";
+
 pub(crate) enum ParseFileType {
     ComposerJson,
     ModifyComposerJson
@@ -20,8 +23,8 @@ pub(crate) enum ParseFileType {
 impl fmt::Display for ParseFileType {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            ParseFileType::ComposerJson => f.write_str("composer.json"),
-            ParseFileType::ModifyComposerJson => f.write_str("modify-composer.json")
+            ParseFileType::ComposerJson => f.write_str(COMPOSER_JSON_FILE_NAME),
+            ParseFileType::ModifyComposerJson => f.write_str(MODIFY_COMPOSER_JSON_FILE_NAME)
         }
     }
 }
