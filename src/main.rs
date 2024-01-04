@@ -8,6 +8,7 @@ use clap::{Parser, Subcommand};
 use serde_json::to_string_pretty;
 
 use crate::composer_json::ComposerJson;
+use crate::modify_composer_json::ModifyComposerJson;
 
 mod composer_json;
 mod modify_composer_json;
@@ -24,17 +25,34 @@ struct Cli {
     debug: u8,
 
     #[command(subcommand)]
+    //command: Option<ParseCommands>,
     command: Option<Commands>,
 }
 
 #[derive(Subcommand, Debug)]
 enum Commands {
+    #[command(subcommand)]
+    Parse(ParseCommands)
+}
+
+#[derive(Subcommand, Debug)]
+enum ParseCommands {
     /// Parse a composer.json file
-    Parse {
+    ComposerJson {
         /// Name of the composer.json file to parse
         file: String,
 
         /// Print the parsed ComposerJson struct to stdout
+        #[arg(short)]
+        print: Option<bool>,
+    },
+
+    /// Parse a modify-composer.json file
+    Modify {
+        /// Name of the modify-composer.json file to parse
+        file: String,
+
+        /// Print the parsed ModifyComposerJson struct to stdout
         #[arg(short)]
         print: Option<bool>,
     },
@@ -101,13 +119,22 @@ fn get_file_path(s: &str) -> Result<&Path, io::Error> {
 
 fn handle(cmds: &Commands) -> io::Result<()> {
     match cmds {
-        Commands::Parse { file, print } => handle_parse(file, print)
+        Commands::Parse (parse_commands) => handle_parse(parse_commands)
+    }?;
+
+    Ok(())
+}
+
+fn handle_parse(cmds: &ParseCommands) -> io::Result<()> {
+    match cmds {
+        ParseCommands::ComposerJson { file, print } => handle_parse_composer_json(file, print),
+        ParseCommands::Modify { file, print } => handle_parse_modify(file, print)
     }
 
     Ok(())
 }
 
-fn handle_parse(file: &str, print: &Option<bool>) -> () {
+fn handle_parse_composer_json(file: &str, print: &Option<bool>) -> () {
     match parse_composer_json_file(&file) {
         Ok(c) => {
             println!("successfully parsed composer.json file: {}", file);
@@ -131,6 +158,35 @@ fn print_composer_json(c: ComposerJson, print: &Option<bool>) -> () {
 
         match result {
             Ok(pretty) => { println!("\ncomposer.json:\n {}", pretty); }
+            Err(e) => { eprintln!("error in processing : {}", e) }
+        }
+    }
+}
+
+fn handle_parse_modify(file: &str, print: &Option<bool>) -> () {
+    match parse_composer_json_file(&file) {
+        Ok(c) => {
+            println!("successfully parsed modify-composer.json file: {}", file);
+            print_composer_json(c, print)
+        }
+        Err(e) => eprintln!("error in processing : {}", e),
+    }
+}
+
+fn parse_modify_composer_json_file(file_name: &str) -> io::Result<ModifyComposerJson> {
+    let file_path = get_file_path(file_name)?;
+    let file_contents = fs::read_to_string(file_path)?;
+    let modify_composer_json: ModifyComposerJson = serde_json::from_str(&file_contents)?;
+
+    Ok(modify_composer_json)
+}
+
+fn print_modify_composer_json(c: ModifyComposerJson, print: &Option<bool>) -> () {
+    if print.unwrap_or(false) {
+        let result = to_string_pretty(&c);
+
+        match result {
+            Ok(pretty) => { println!("\nmodify-composer.json:\n {}", pretty); }
             Err(e) => { eprintln!("error in processing : {}", e) }
         }
     }
