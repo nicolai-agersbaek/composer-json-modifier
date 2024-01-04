@@ -49,7 +49,7 @@ enum ParseCommands {
 
         /// Print the parsed ComposerJson struct to stdout
         #[arg(short, long, default_value="false")]
-        print: Option<bool>,
+        print: bool,
     },
 
     /// Parse a modify-composer.json file
@@ -59,7 +59,7 @@ enum ParseCommands {
 
         /// Print the parsed ModifyComposerJson struct to stdout
         #[arg(short, long, default_value="false")]
-        print: Option<bool>,
+        print: bool,
     },
 }
 
@@ -72,11 +72,11 @@ enum ModifyCommands {
 
         /// Print the modified ComposerJson struct to stdout
         #[arg(short, long, default_value="false")]
-        print: Option<bool>,
+        print: bool,
 
         /// Whether to apply resulting changes to target file
         #[arg(short, long, default_value="false")]
-        dry_run: Option<bool>,
+        dry_run: bool,
     },
 }
 
@@ -123,13 +123,13 @@ fn handle_parse_commands(cmds: &ParseCommands) -> io::Result<()> {
 fn handle_modify_commands(cmds: &ModifyCommands) -> io::Result<()> {
     match cmds {
         ModifyCommands::Run { file, print, dry_run } => {
-            if dry_run.unwrap_or(false) {
+            if *dry_run {
                 println!("Modifying {} (in dry-run mode)", file)
             } else {
                 println!("Modifying {}", file)
             }
 
-            if print.unwrap_or(false) {
+            if *print {
                 let pretty = "<placeholder>";
 
                 println!("\n{}:\n{}", file, pretty);

@@ -30,14 +30,14 @@ impl fmt::Display for ParseFileType {
 }
 
 impl ParseFileType {
-    pub(crate) fn handle_parse(&self, file_name: &str, print: &Option<bool>) -> () {
+    pub(crate) fn handle_parse(&self, file_name: &str, print: &bool) -> () {
         match self {
             ParseFileType::ComposerJson => self.handle_parse2::<ComposerJson>(file_name, print),
             ParseFileType::ModifyComposerJson => self.handle_parse2::<ModifyComposerJson>(file_name, print)
         }
     }
     
-    fn handle_parse2<S>(&self, file_name: &str, print: &Option<bool>) -> () 
+    fn handle_parse2<S>(&self, file_name: &str, print: &bool) -> () 
         where S: for<'a> Deserialize<'a>+Serialize
     {
         match self.parse::<S>(&file_name) {
@@ -58,10 +58,10 @@ impl ParseFileType {
         Ok(result)
     }
     
-    fn print_parsed_json<S>(&self, parsed: S, file_name: &str, print: &Option<bool>) -> () 
+    fn print_parsed_json<S>(&self, parsed: S, file_name: &str, print: &bool) -> () 
             where S: for<'a> Deserialize<'a>+Serialize
         {
-        if print.unwrap_or(false) {
+        if *print {
             let result = to_string_pretty(&parsed);
     
             match result {
