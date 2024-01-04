@@ -1,0 +1,30 @@
+{
+    "name": "smartweb/cloud-events",
+    "description": "An implementation of the CloudEvents specification.",
+    "authors": [
+      {
+        "name": "Nicolai Agersbæk",
+        "email": "na@smartweb.dk"
+      }
+    ],
+    "type": "project",
+    "require": {
+      "php": ">=7.1"
+    },
+    "require-dev": {
+      "roave/security-advisories": "dev-master"
+    },
+    "autoload": {
+      "psr-4": {
+        "SmartWeb\\CloudEvents\\": "src/"
+      }
+    },
+    "config": {
+      "preferred-install": "dist",
+      "sort-packages": true,
+      "platform": {
+        "php": "7.1",
+        "ext-bcmath": "2.6.3"
+      }
+    }
+  }

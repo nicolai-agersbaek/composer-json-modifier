@@ -27,6 +27,7 @@ pub struct ComposerJson {
     /// Required for published packages (libraries).
     ///
     /// Reference: [The composer.json schema (description)](https://getcomposer.org/doc/04-schema.md#description).
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
 
     /// The version of the package. In most cases this is not required and should be omitted (see below).
@@ -54,6 +55,7 @@ pub struct ComposerJson {
     /// at some point due to human error.
     ///
     /// Reference: [The composer.json schema (version)](https://getcomposer.org/doc/04-schema.md#version).
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 
     /// The type of the package. It defaults to `library`.
@@ -81,6 +83,7 @@ pub struct ComposerJson {
     ///
     /// Reference: [The composer.json schema (type)](https://getcomposer.org/doc/04-schema.md#type).
     #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub package_type: Option<PackageType>,
 
     /// An array of keywords that the package is related to. These can be used for searching and filtering.
@@ -99,11 +102,13 @@ pub struct ComposerJson {
     /// These are: `dev`, `testing`, `static analysis`.
     ///
     /// Reference: [The composer.json schema (keywords)](https://getcomposer.org/doc/04-schema.md#keywords).
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub keywords: Option<Vec<String>>,
 
     /// A URL to the website of the project.
     ///
     /// Reference: [The composer.json schema (homepage)](https://getcomposer.org/doc/04-schema.md#homepage).
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub homepage: Option<String>,
 
     /// A relative path to the readme document. Defaults to `README.md`.
@@ -112,6 +117,7 @@ pub struct ComposerJson {
     /// Packagist.org will use the readme API to fetch the one detected by GitHub.
     ///
     /// Reference: [The composer.json schema (readme)](https://getcomposer.org/doc/04-schema.md#readme).
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub readme: Option<String>,
 
     /// Release date of the version.
@@ -119,6 +125,7 @@ pub struct ComposerJson {
     /// Must be in `YYYY-MM-DD` or `YYYY-MM-DD HH:MM:SS` format.
     ///
     /// Reference: [The composer.json schema (time)](https://getcomposer.org/doc/04-schema.md#time).
+    #[serde(skip_serializing_if = "Option::is_none")]
     // FIXME: Should be an optional date-time!
     pub time: Option<String>,
 
@@ -174,6 +181,7 @@ pub struct ComposerJson {
     /// Similarly, when multiple licenses need to be applied ("conjunctive license"), they should be separated with "and" and enclosed in parentheses.
     ///
     /// Reference: [The composer.json schema (license)](https://getcomposer.org/doc/04-schema.md#license).
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub license: Option<OneOrMany<String>>,
 
     /// The authors of the package. This is an array of objects.
@@ -209,6 +217,7 @@ pub struct ComposerJson {
     /// Optional, but highly recommended.
     ///
     /// Reference: [The composer.json schema (authors)](https://getcomposer.org/doc/04-schema.md#authors).
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authors: Option<Vec<Author>>,
 
     /// Various information to get support about the project.
@@ -237,6 +246,7 @@ pub struct ComposerJson {
     /// ```
     ///
     /// Reference: [The composer.json schema (support)](https://getcomposer.org/doc/04-schema.md#support).
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub support: Option<Support>,
 
     /// A list of URLs to provide funding to the package authors for maintenance and development of new functionality.
@@ -265,6 +275,7 @@ pub struct ComposerJson {
     /// }
     ///
     /// Reference: [The composer.json schema (funding)](https://getcomposer.org/doc/04-schema.md#funding).
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub funding: Option<Vec<Funding>>,
 
     /// Reference: [The composer.json schema (package links)](https://getcomposer.org/doc/04-schema.md#package-links).
@@ -279,6 +290,7 @@ pub struct ComposerJson {
     /// PSR-4 is the recommended way since it offers greater ease of use (no need to regenerate the autoloader when you add classes).
     ///
     /// Reference: [The composer.json schema (autoload)](https://getcomposer.org/doc/04-schema.md#autoload).
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub autoload: Option<Autoload>,
 
     /// This section allows defining autoload rules for development purposes.
@@ -303,6 +315,7 @@ pub struct ComposerJson {
     ///
     /// Reference: [The composer.json schema (autoload-dev)](https://getcomposer.org/doc/04-schema.md#autoload-dev).
     #[serde(rename = "autoload-dev")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub autoload_dev: Option<Autoload>, // root-only
 
     /// **DEPRECATED:**
@@ -323,6 +336,7 @@ pub struct ComposerJson {
     /// Reference: [The composer.json schema (include-path)](https://getcomposer.org/doc/04-schema.md#include-path).
     #[deprecated]
     #[serde(rename = "target-dir")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub include_path: Option<Vec<String>>,
 
     /// **DEPRECATED:**
@@ -356,6 +370,7 @@ pub struct ComposerJson {
     /// Reference: [The composer.json schema (target-dir)](https://getcomposer.org/doc/04-schema.md#target-dir).
     #[deprecated]
     #[serde(rename = "target-dir")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub target_dir: Option<String>,
 
     /// This defines the default behavior for filtering packages by stability.
@@ -375,6 +390,7 @@ pub struct ComposerJson {
     /// - stable
     ///
     /// Reference: [The composer.json schema (minimum stability)](https://getcomposer.org/doc/04-schema.md#minimum-stability).
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_stability: Option<Stability>,
 
     /// When this is enabled, Composer will prefer more stable packages over unstable ones when finding
@@ -385,6 +401,7 @@ pub struct ComposerJson {
     /// Use `"prefer-stable": true` to enable.
     ///
     /// Reference: [The composer.json schema (prefer stable)](https://getcomposer.org/doc/04-schema.md#prefer-stable).
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub prefer_stable: Option<bool>, // root-only
 
     /// Custom package repositories to use.
@@ -471,11 +488,13 @@ pub struct ComposerJson {
     /// ```
     ///
     /// Reference: [The composer.json schema (repositories)](https://getcomposer.org/doc/04-schema.md#repositories).
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub repositories: Option<Vec<Repository>>, // root-only
 
     /// A set of configuration options. It is only used for projects. See Config for a description of each individual option.
     ///
     /// Reference: [The composer.json schema (config)](https://getcomposer.org/doc/04-schema.md#config).
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config: Option<Config>, // root-only
 
     /// Composer allows you to hook into various parts of the installation process through the use of scripts.
@@ -483,6 +502,7 @@ pub struct ComposerJson {
     /// See [Scripts](https://getcomposer.org/doc/articles/scripts.md) for events details and examples.
     ///
     /// Reference: [The composer.json schema (scripts)](https://getcomposer.org/doc/04-schema.md#scripts).
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub scripts: Option<Scripts>, // root-only
 
     /// Arbitrary extra data for consumption by `scripts`.
@@ -494,6 +514,7 @@ pub struct ComposerJson {
     /// ```
     ///
     /// Reference: [The composer.json schema (extra)](https://getcomposer.org/doc/04-schema.md#extra).
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub extra: Option<Value>, // root-only
 
     /// A set of files that should be treated as binaries and made available into the `bin-dir` (from config).
@@ -501,6 +522,7 @@ pub struct ComposerJson {
     /// See [Vendor Binaries](https://getcomposer.org/doc/articles/vendor-binaries.md) for more details.
     ///
     /// Reference: [The composer.json schema (bin)](https://getcomposer.org/doc/04-schema.md#bin).
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub bin: Option<Vec<String>>,
 
     /// A set of options for creating package archives.
@@ -542,6 +564,7 @@ pub struct ComposerJson {
     /// it will exclude `/foo/bar/any`, `/foo/baz`, and `/my.test`.
     ///
     /// Reference: [The composer.json schema (archive)](https://getcomposer.org/doc/04-schema.md#archive).
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub archive: Option<Archive>,
 
     /// Indicates whether this package has been abandoned.
@@ -557,6 +580,7 @@ pub struct ComposerJson {
     /// Defaults to `false`.
     ///
     /// Reference: [The composer.json schema (abandoned)](https://getcomposer.org/doc/04-schema.md#abandoned).
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub abandoned: Option<Abandoned>,
 
     /// A list of regex patterns of branch names that are non-numeric (e.g. "latest" or something),
@@ -595,6 +619,7 @@ pub struct ComposerJson {
     ///
     /// Reference: [The composer.json schema (non-feature-branches)](https://getcomposer.org/doc/04-schema.md#non-feature-branches).
     #[serde(rename = "non-feature-branches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub non_feature_branches: Option<Vec<String>>,
 }
 
@@ -776,6 +801,7 @@ pub struct PackageLinks {
     ///
     /// See [The composer.json schema](https://getcomposer.org/doc/04-schema.md#require-dev) for details.
     #[serde(rename = "require-dev")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub require_dev: Option<HashMap<String, String>>, // root-only
 
     /// Map of packages that conflict with this version of this package.
@@ -786,6 +812,7 @@ pub struct PackageLinks {
     /// which is probably not what you want. You probably want to go for `<1.0 || >=1.1` in this case.
     ///
     /// See [The composer.json schema](https://getcomposer.org/doc/04-schema.md#conflict) for details.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub conflict: Option<HashMap<String, String>>,
 
     /// Map of packages that are replaced by this package.
@@ -804,6 +831,7 @@ pub struct PackageLinks {
     /// version, which would be incorrect.
     ///
     /// See [The composer.json schema](https://getcomposer.org/doc/04-schema.md#replace) for details.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replace: Option<HashMap<String, String>>,
 
     /// Map of packages that are provided by this package.
@@ -819,6 +847,7 @@ pub struct PackageLinks {
     /// the name of the virtual package corresponding to the interface package.
     ///
     /// See [The composer.json schema](https://getcomposer.org/doc/04-schema.md#provide) for details.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provide: Option<HashMap<String, String>>,
 
     /// Suggested packages that can enhance or work well with this package.
@@ -838,6 +867,7 @@ pub struct PackageLinks {
     /// ```
     ///
     /// See [The composer.json schema](https://getcomposer.org/doc/04-schema.md#suggest) for details.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub suggest: Option<HashMap<String, String>>,
 }
 
@@ -845,7 +875,11 @@ pub struct PackageLinks {
 pub struct Author {
     pub name: String,
     pub email: String,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub homepage: Option<String>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
 }
 
@@ -877,15 +911,34 @@ pub struct Author {
 /// See [The composer.json schema](https://getcomposer.org/doc/04-schema.md#support) for details.
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Support {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
+    
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub issues: Option<String>,
+    
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub forum: Option<String>,
+    
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub wiki: Option<String>,
+    
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub irc: Option<String>,
+    
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<String>,
+    
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub docs: Option<String>,
+    
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rss: Option<String>,
+    
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub chat: Option<String>,
+    
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub security: Option<String>,
 }
 
@@ -952,6 +1005,7 @@ pub struct Autoload {
     ///
     /// See [The composer.json schema](https://getcomposer.org/doc/04-schema.md#psr-4) for details.
     #[serde(rename = "psr-4")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub psr_4: Option<HashMap<String, String>>,
 
     /// Under the `psr-0` key you define a mapping from namespaces to paths, relative to the package root.
@@ -999,6 +1053,7 @@ pub struct Autoload {
     ///
     /// See [The composer.json schema](https://getcomposer.org/doc/04-schema.md#psr-0) for details.
     #[serde(rename = "psr-0")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub psr_0: Option<HashMap<String, String>>,
 
     /// The `classmap` references are all combined, during install/update, into a single key => value array
@@ -1023,6 +1078,7 @@ pub struct Autoload {
     /// ```
     ///
     /// See [The composer.json schema](https://getcomposer.org/doc/04-schema.md#classmap) for details.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub classmap: Option<Vec<String>>,
 
     /// If you want to require certain files explicitly on every request then you can use the `files` autoloading mechanism.
@@ -1048,6 +1104,7 @@ pub struct Autoload {
     /// including Composer's `vendor/autoload.php`.
     ///
     /// See [The composer.json schema](https://getcomposer.org/doc/04-schema.md#files) for details.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub files: Option<Vec<String>>,
 
     /// If you want to exclude some files or folders from the classmap you can use the `exclude-from-classmap` property.
@@ -1067,6 +1124,7 @@ pub struct Autoload {
     ///
     /// See [The composer.json schema](https://getcomposer.org/doc/04-schema.md#exclude-from-classmap) for details.
     #[serde(rename = "exclude-from-classmap")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub exclude_from_classmap: Option<Vec<String>>,
 }
 
@@ -1280,12 +1338,13 @@ pub struct BasicAuth {
 pub type HttpBasicAuth = HashMap<Host, BasicAuth>;
 pub type PlatformPackage = String;
 pub type Version = String;
+pub type PlatformConstraint = String;
 
-#[derive(Debug, Serialize, Deserialize)]
-pub enum PlatformConstraint {
-    Version(Version),
-    Hide(bool),
-}
+//#[derive(Debug, Serialize, Deserialize)]
+//pub enum PlatformConstraint {
+    //Version(Version),
+    //Hide(bool),
+//}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum BinaryCompatibility {
@@ -1318,6 +1377,14 @@ pub enum PlatformCheckMode {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+pub enum PreferredInstall {
+    #[serde(rename = "dist")]
+    Dist,
+
+    Map(HashMap<String, PackageSourceConfig>),
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
     /// The timeout in seconds for process executions, defaults to 300 (5 minutes).
     /// The duration processes like git clones can run before Composer assumes they died out.
@@ -1338,6 +1405,7 @@ pub struct Config {
     ///
     /// Reference: [Config (process-timeout)](https://getcomposer.org/doc/06-config.md#process-timeout).
     #[serde(rename = "process-timeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     process_timeout: Option<u32>,
 
     /// Defaults to `{}` which does not allow any plugins to be loaded.
@@ -1380,6 +1448,7 @@ pub struct Config {
     ///
     /// Reference: [Config (allow-plugins)](https://getcomposer.org/doc/06-config.md#allow-plugins).
     #[serde(rename = "allow-plugins")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     allow_plugins: Option<AllowPlugins>,
 
     /// Defaults to `false`.
@@ -1387,6 +1456,7 @@ pub struct Config {
     ///
     /// Reference: [Config (use-include-path)](https://getcomposer.org/doc/06-config.md#use-include-path).
     #[serde(rename = "use-include-path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     use_include_path: Option<bool>,
 
     /// Defaults to `dist` and can be any of `source`, `dist` or `auto`.
@@ -1421,12 +1491,14 @@ pub struct Config {
     ///
     /// Reference: [Config (preferred-install)](https://getcomposer.org/doc/06-config.md#preferred-install).
     #[serde(rename = "preferred-install")]
-    preferred_install: Option<HashMap<String, PackageSourceConfig>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    preferred_install: Option<PreferredInstall>,
 
     /// Security audit configuration options.
     ///
     /// Reference: [Config (audit)](https://getcomposer.org/doc/06-config.md#audit).
     #[serde(rename = "audit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     audit: Option<Audit>,
 
     /// When running Composer in a directory where there is no composer.json, if there is one
@@ -1442,6 +1514,7 @@ pub struct Config {
     ///
     /// Reference: [Config (use-parent-dir)](https://getcomposer.org/doc/06-config.md#use-parent-dir).
     #[serde(rename = "use-parent-dir")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     use_parent_dir: Option<bool>,
 
     /// What to do after prompting for authentication, one of:
@@ -1453,6 +1526,7 @@ pub struct Config {
     ///
     /// Reference: [Config (store-auths)](https://getcomposer.org/doc/06-config.md#store-auths).
     #[serde(rename = "store-auths")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     store_auths: Option<ConfigStoreAuths>,
 
     /// A list of protocols to use when cloning from github.com, in priority order.
@@ -1466,6 +1540,7 @@ pub struct Config {
     ///
     /// Reference: [Config (github-protocols)](https://getcomposer.org/doc/06-config.md#github-protocols).
     #[serde(rename = "github-protocols")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     github_protocols: Option<Vec<String>>,
 
     /// A list of domain names and oauth keys.
@@ -1477,6 +1552,7 @@ pub struct Config {
     ///
     /// Reference: [Config (github-oauth)](https://getcomposer.org/doc/06-config.md#github-oauth).
     #[serde(rename = "github-oauth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     github_oauth: Option<HashMap<String, String>>,
 
     /// Defaults to ["gitlab.com"].
@@ -1485,6 +1561,7 @@ pub struct Config {
     ///
     /// Reference: [Config (gitlab-domains)](https://getcomposer.org/doc/06-config.md#gitlab-domains).
     #[serde(rename = "gitlab-domains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     gitlab_domains: Option<Vec<String>>,
 
     /// A list of domain names and oauth keys.
@@ -1499,6 +1576,7 @@ pub struct Config {
     ///
     /// Reference: [Config (gitlab-oauth)](https://getcomposer.org/doc/06-config.md#gitlab-oauth).
     #[serde(rename = "gitlab-oauth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     gitlab_oauth: Option<HashMap<String, String>>,
 
     /// A list of domain names and private tokens.
@@ -1515,6 +1593,7 @@ pub struct Config {
     ///
     /// Reference: [Config (gitlab-token)](https://getcomposer.org/doc/06-config.md#gitlab-token).
     #[serde(rename = "gitlab-token")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     gitlab_token: Option<GitlabTokenConfig>,
 
     /// A protocol to force use of when creating a repository URL for the `source` value
@@ -1527,6 +1606,7 @@ pub struct Config {
     ///
     /// Reference: [Config (gitlab-protocol)](https://getcomposer.org/doc/06-config.md#gitlab-protocol).
     #[serde(rename = "gitlab-protocol")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     gitlab_protocol: Option<GitProtocol>,
 
     /// Defaults to `false`.
@@ -1538,6 +1618,7 @@ pub struct Config {
     ///
     /// Reference: [Config (disable-tls)](https://getcomposer.org/doc/06-config.md#disable-tls).
     #[serde(rename = "disable-tls")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     disable_tls: Option<bool>,
 
     /// Defaults to `true`.
@@ -1547,6 +1628,7 @@ pub struct Config {
     ///
     /// Reference: [Config (secure-http)](https://getcomposer.org/doc/06-config.md#secure-http).
     #[serde(rename = "secure-http")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     secure_http: Option<bool>,
 
     /// A list of domain names and consumers.
@@ -1565,6 +1647,7 @@ pub struct Config {
     ///
     /// Reference: [Config (bitbucket-oauth)](https://getcomposer.org/doc/06-config.md#bitbucket-oauth).
     #[serde(rename = "bitbucket-oauth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     bitbucket_oauth: Option<HashMap<BitbucketHost, BitbucketOauth>>,
 
     /// Location of Certificate Authority file on local filesystem.
@@ -1573,6 +1656,7 @@ pub struct Config {
     ///
     /// Reference: [Config ("cafile")](https://getcomposer.org/doc/06-config.md#"cafile").
     #[serde(rename = "cafile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     cafile: Option<String>,
 
     /// If cafile is not specified or if the certificate is not found there,
@@ -1581,6 +1665,7 @@ pub struct Config {
     ///
     /// Reference: [Config ("capath")](https://getcomposer.org/doc/06-config.md#"capath").
     #[serde(rename = "capath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     capath: Option<String>,
 
     /// A list of domain names and username/passwords to authenticate against them.
@@ -1600,6 +1685,7 @@ pub struct Config {
     ///
     /// Reference: [Config (http-basic)](https://getcomposer.org/doc/06-config.md#http-basic).
     #[serde(rename = "http-basic")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     http_basic: Option<HttpBasicAuth>,
 
     /// A list of domain names and tokens to authenticate against them.
@@ -1615,6 +1701,7 @@ pub struct Config {
     ///
     /// Reference: [Config ("bearer")](https://getcomposer.org/doc/06-config.md#"bearer").
     #[serde(rename = "bearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     bearer: Option<HashMap<Host, String>>,
 
     /// Lets you fake platform packages (PHP and extensions) so that you can emulate
@@ -1649,6 +1736,7 @@ pub struct Config {
     ///
     /// Reference: [Config ("platform")](https://getcomposer.org/doc/06-config.md#"platform").
     #[serde(rename = "platform")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     platform: Option<HashMap<PlatformPackage, PlatformConstraint>>,
 
     /// Defaults to `vendor`.
@@ -1658,6 +1746,7 @@ pub struct Config {
     ///
     /// Reference: [Config (vendor-dir)](https://getcomposer.org/doc/06-config.md#vendor-dir).
     #[serde(rename = "vendor-dir")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     vendor_dir: Option<String>,
 
     /// Defaults to `vendor/bin`.
@@ -1665,6 +1754,7 @@ pub struct Config {
     ///
     /// Reference: [Config (bin-dir)](https://getcomposer.org/doc/06-config.md#bin-dir).
     #[serde(rename = "bin-dir")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     bin_dir: Option<String>,
 
     /// Defaults to `C:\Users\<user>\AppData\Roaming\Composer` on Windows,
@@ -1675,6 +1765,7 @@ pub struct Config {
     ///
     /// Reference: [Config (data-dir)](https://getcomposer.org/doc/06-config.md#data-dir).
     #[serde(rename = "data-dir")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     data_dir: Option<String>,
 
     /// Defaults to `C:\Users\<user>\AppData\Local\Composer` on Windows,
@@ -1686,6 +1777,7 @@ pub struct Config {
     ///
     /// Reference: [Config (cache-dir)](https://getcomposer.org/doc/06-config.md#cache-dir).
     #[serde(rename = "cache-dir")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     cache_dir: Option<String>,
 
     /// Defaults to `$cache-dir/files`.
@@ -1693,6 +1785,7 @@ pub struct Config {
     ///
     /// Reference: [Config (cache-files-dir)](https://getcomposer.org/doc/06-config.md#cache-files-dir).
     #[serde(rename = "cache-files-dir")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     cache_files_dir: Option<String>,
 
     /// Defaults to `$cache-dir/repo`.
@@ -1701,6 +1794,7 @@ pub struct Config {
     ///
     /// Reference: [Config (cache-repo-dir)](https://getcomposer.org/doc/06-config.md#cache-repo-dir).
     #[serde(rename = "cache-repo-dir")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     cache_repo_dir: Option<String>,
 
     /// Defaults to `$cache-dir/vcs`.
@@ -1709,6 +1803,7 @@ pub struct Config {
     ///
     /// Reference: [Config (cache-vcs-dir)](https://getcomposer.org/doc/06-config.md#cache-vcs-dir).
     #[serde(rename = "cache-vcs-dir")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     cache_vcs_dir: Option<String>,
 
     /// Defaults to `15552000` (6 months).
@@ -1718,6 +1813,7 @@ pub struct Config {
     ///
     /// Reference: [Config (cache-files-ttl)](https://getcomposer.org/doc/06-config.md#cache-files-ttl).
     #[serde(rename = "cache-files-ttl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     cache_files_ttl: Option<u32>,
 
     /// Defaults to `300MiB`. Composer caches all dist (zip, tar, ...) packages that it downloads.
@@ -1727,6 +1823,7 @@ pub struct Config {
     ///
     /// Reference: [Config (cache-files-maxsize)](https://getcomposer.org/doc/06-config.md#cache-files-maxsize).
     #[serde(rename = "cache-files-maxsize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     cache_files_maxsize: Option<String>,
 
     /// Defaults to `false`.
@@ -1734,6 +1831,7 @@ pub struct Config {
     ///
     /// Reference: [Config (cache-read-only)](https://getcomposer.org/doc/06-config.md#cache-read-only).
     #[serde(rename = "cache-read-only")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     cache_read_only: Option<bool>,
 
     /// Defaults to `auto`.
@@ -1748,6 +1846,7 @@ pub struct Config {
     ///
     /// Reference: [Config (bin-compat)](https://getcomposer.org/doc/06-config.md#bin-compat).
     #[serde(rename = "bin-compat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     bin_compat: Option<BinaryCompatibility>,
 
     /// Defaults to `true`.
@@ -1756,6 +1855,7 @@ pub struct Config {
     ///
     /// Reference: [Config (prepend-autoloader)](https://getcomposer.org/doc/06-config.md#prepend-autoloader).
     #[serde(rename = "prepend-autoloader")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     prepend_autoloader: Option<bool>,
 
     /// Defaults to `null`.
@@ -1766,6 +1866,7 @@ pub struct Config {
     ///
     /// Reference: [Config (autoloader-suffix)](https://getcomposer.org/doc/06-config.md#autoloader-suffix).
     #[serde(rename = "autoloader-suffix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     autoloader_suffix: Option<String>,
 
     /// Defaults to `false`.
@@ -1773,6 +1874,7 @@ pub struct Config {
     ///
     /// Reference: [Config (optimize-autoloader)](https://getcomposer.org/doc/06-config.md#optimize-autoloader).
     #[serde(rename = "optimize-autoloader")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     optimize_autoloader: Option<bool>,
 
     /// Defaults to `false`.
@@ -1781,6 +1883,7 @@ pub struct Config {
     ///
     /// Reference: [Config (sort-packages)](https://getcomposer.org/doc/06-config.md#sort-packages).
     #[serde(rename = "sort-packages")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     sort_packages: Option<bool>,
 
     /// Defaults to `false`.
@@ -1789,6 +1892,7 @@ pub struct Config {
     ///
     /// Reference: [Config (classmap-authoritative)](https://getcomposer.org/doc/06-config.md#classmap-authoritative).
     #[serde(rename = "classmap-authoritative")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     classmap_authoritative: Option<bool>,
 
     /// Defaults to `false`.
@@ -1797,6 +1901,7 @@ pub struct Config {
     ///
     /// Reference: [Config (apcu-autoloader)](https://getcomposer.org/doc/06-config.md#apcu-autoloader).
     #[serde(rename = "apcu-autoloader")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     apcu_autoloader: Option<bool>,
 
     /// Defaults to `["github.com"]`.
@@ -1805,6 +1910,7 @@ pub struct Config {
     ///
     /// Reference: [Config (github-domains)](https://getcomposer.org/doc/06-config.md#github-domains).
     #[serde(rename = "github-domains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     github_domains: Option<Vec<GithubHost>>,
 
     /// Defaults to `true`.
@@ -1813,6 +1919,7 @@ pub struct Config {
     ///
     /// Reference: [Config (github-expose-hostname)](https://getcomposer.org/doc/06-config.md#github-expose-hostname).
     #[serde(rename = "github-expose-hostname")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     github_expose_hostname: Option<bool>,
 
     /// Defaults to `true`.
@@ -1825,6 +1932,7 @@ pub struct Config {
     ///
     /// Reference: [Config (use-github-api)](https://getcomposer.org/doc/06-config.md#use-github-api).
     #[serde(rename = "use-github-api")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     use_github_api: Option<bool>,
 
     /// Defaults to `true`.
@@ -1834,6 +1942,7 @@ pub struct Config {
     ///
     /// Reference: [Config (notify-on-install)](https://getcomposer.org/doc/06-config.md#notify-on-install).
     #[serde(rename = "notify-on-install")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     notify_on_install: Option<bool>,
 
     /// Defaults to `false` and can be any of `true`, `false` or `"stash"`.
@@ -1845,6 +1954,7 @@ pub struct Config {
     ///
     /// Reference: [Config (discard-changes)](https://getcomposer.org/doc/06-config.md#discard-changes).
     #[serde(rename = "discard-changes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     discard_changes: Option<DiscardChangesMode>,
 
     /// Defaults to `tar`.
@@ -1852,6 +1962,7 @@ pub struct Config {
     ///
     /// Reference: [Config (archive-format)](https://getcomposer.org/doc/06-config.md#archive-format).
     #[serde(rename = "archive-format")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     archive_format: Option<ArchiveFormat>,
 
     /// Defaults to `.`.
@@ -1868,6 +1979,7 @@ pub struct Config {
     ///
     /// Reference: [Config (archive-dir)](https://getcomposer.org/doc/06-config.md#archive-dir).
     #[serde(rename = "archive-dir")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     archive_dir: Option<String>,
 
     /// Defaults to `true`.
@@ -1876,6 +1988,7 @@ pub struct Config {
     ///
     /// Reference: [Config (htaccess-protect)](https://getcomposer.org/doc/06-config.md#htaccess-protect).
     #[serde(rename = "htaccess-protect")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     htaccess_protect: Option<bool>,
 
     /// Defaults to `true`.
@@ -1884,6 +1997,7 @@ pub struct Config {
     ///
     /// Reference: [Config (lock)](https://getcomposer.org/doc/06-config.md#lock).
     #[serde(rename = "lock")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     lock: Option<bool>,
 
     /// Defaults to `php-only` which only checks the PHP version.
@@ -1893,6 +2007,7 @@ pub struct Config {
     ///
     /// Reference: [Config (platform-check)](https://getcomposer.org/doc/06-config.md#platform-check).
     #[serde(rename = "platform-check")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     platform_check: Option<PlatformCheckMode>,
 
     /// Defaults to `[]`.
@@ -1904,6 +2019,7 @@ pub struct Config {
     ///
     /// Reference: [Config (secure-svn-domains)](https://getcomposer.org/doc/06-config.md#secure-svn-domains).
     #[serde(rename = "secure-svn-domains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     secure_svn_domains: Option<Vec<Host>>,
 }
 
@@ -2232,7 +2348,10 @@ pub struct Scripts {
 /// See [The composer.json schema](https://getcomposer.org/doc/04-schema.md#archive) for details.
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Archive {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub exclude: Option<Vec<String>>,
 }
 
