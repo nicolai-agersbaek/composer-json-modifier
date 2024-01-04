@@ -157,17 +157,17 @@ fn print_composer_json(c: ComposerJson, print: &Option<bool>) -> () {
         let result = to_string_pretty(&c);
 
         match result {
-            Ok(pretty) => { println!("\ncomposer.json:\n {}", pretty); }
+            Ok(pretty) => { println!("\ncomposer.json:\n{}", pretty); }
             Err(e) => { eprintln!("error in processing : {}", e) }
         }
     }
 }
 
 fn handle_parse_modify(file: &str, print: &Option<bool>) -> () {
-    match parse_composer_json_file(&file) {
+    match parse_modify_composer_json_file(&file) {
         Ok(c) => {
             println!("successfully parsed modify-composer.json file: {}", file);
-            print_composer_json(c, print)
+            print_modify_composer_json(c, print)
         }
         Err(e) => eprintln!("error in processing : {}", e),
     }
@@ -186,7 +186,7 @@ fn print_modify_composer_json(c: ModifyComposerJson, print: &Option<bool>) -> ()
         let result = to_string_pretty(&c);
 
         match result {
-            Ok(pretty) => { println!("\nmodify-composer.json:\n {}", pretty); }
+            Ok(pretty) => { println!("\nmodify-composer.json:\n{}", pretty); }
             Err(e) => { eprintln!("error in processing : {}", e) }
         }
     }

@@ -8,21 +8,31 @@ use crate::composer_json::{AllowPlugins, PlatformConstraint};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ModifyComposerJson {
-    pub modify: ModifyConfig,
-    pub add: AddConfig,
-    pub remove: RemoveConfig,
-    pub replace: ReplaceConfig,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub modify: Option<ModifyConfig>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub add: Option<AddConfig>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remove: Option<RemoveConfig>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replace: Option<ReplaceConfig>,
 }
 
 // region <<- [ ModifyConfig ] ->>
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ModifyConfig {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub require: Option<Require>,
 
     #[serde(rename = "require-dev")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub require_dev: Option<Require>,
 
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub config: Option<HashMap<String, String>>,
 }
 
@@ -51,9 +61,11 @@ pub struct ReplaceConfig {}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ModifierConfig {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub platform: Option<HashMap<crate::composer_json::PlatformPackage, PlatformConstraint>>,
 
     #[serde(rename = "allow-plugins")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     allow_plugins: Option<AllowPlugins>,
 }
 
